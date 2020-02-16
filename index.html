@@ -1,0 +1,183 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sommarlovsnedräknaren</title>
+<style>
+p {
+  text-align: center;
+  font-size: 10vw;
+  font-style: italic;
+  color: limegreen;
+  margin-top: 0px;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  position: fixed;
+  align-items: center;
+  justify-content: center;
+  text-shadow: 3px 2px white;
+}
+body {
+  background-image: url('bakgrund.jpg');
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-size: cover;
+  background-position: center;
+}
+#overlay {
+  position: fixed;
+  display: none;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0,0,0,0.0);
+  z-index: 2;
+}
+.manga {
+   animation-name: glid;
+   animation-duration: 8s;
+   opacity: 0;
+   position: fixed;
+   transform: scale(0.5, 0.5);
+}
+.sol {
+   animation-name: snurra;
+   animation-duration: 4s;
+   animation-iteration-count: infinite;
+   opacity: 1;
+   position: fixed;
+   animation-timing-function: linear;
+   top: -30vh;
+   left: 50vw;
+}
+#overlay2 {
+  position: fixed;
+  display: none;
+  width: 100%;
+  height: 100%;
+  top: 0vh;
+  left: 25vw;
+  right: 25vw;
+  bottom: 25vh;
+  background-color: rgba(0,0,0,0.0);
+  z-index: 1;
+}
+@keyframes glid {
+ from {
+  left: -50vw;
+  opacity: 1;
+ }
+ 99% {
+  left: 250vw;
+  opacity: 1;
+ }
+ to {
+  opacity: 0;
+  left: 250vw;
+ }
+}
+@keyframes snurra {
+    from {
+        transform: rotateZ(0deg) scale(0.5, 0.5);
+    }
+    50% {
+        transform: rotateZ(180deg) scale(0.55, 0.55);
+    }
+    100% {
+        transform: rotateZ(360deg) scale(0.5, 0.5);
+    }
+}
+</style>
+</head>
+<body onload="ok()" onclick="klicka()">
+
+<p id="demo"></p>
+<div id="overlay">
+    <img src="smiley.png" class="manga">
+    </img>
+</div>
+<div id="overlay2">
+    <img src="https://cdn.pixabay.com/photo/2015/12/03/15/43/sun-1075154_960_720.png" class="sol">
+    </img>
+</div>
+<script>
+var schemalagg;
+var mellan = 10000;
+var klickat = false;
+// Nedräkningsdatum, och starta nedräknare. Körs när allt är klart
+function ok() {
+    document.getElementById("demo").innerHTML = "Snart är det sommarlov!";
+    var countDownDate = new Date("Jun 11, 2020 12:00:00").getTime();
+    // Update the count down every 1 second
+    var x = setInterval(function() {
+        // Get todays date and time
+        var now = new Date().getTime();
+    
+        // Find the distance between now and the count down date
+        var distance = countDownDate - now;
+    
+        // Time calculations for days, hours, minutes and seconds
+        var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+    
+        // Output the result in an element with id="demo"
+        document.getElementById("demo").innerHTML = days + "d " + hours + "h "
+        + minutes + "m " + seconds + "s ";
+        document.title = document.getElementById("demo").innerHTML;
+    
+        // If the count down is over, write some text 
+        if (distance < 0) {
+            clearInterval(x);
+            document.getElementById("demo").innerHTML = "Nu är det sommarlov!";
+            document.title = "Nu är det sommarlov!";
+            document.getElementById("overlay").style.display = "block";
+            document.getElementById("overlay2").style.display = "block";
+            kaos();
+        }
+    }, 1000);
+}
+function kaos() {
+    schemalagg = setTimeout(schemalaggNy, Math.random() * mellan);
+    setInterval(minska, 1000);
+}
+function schemalaggNy() {
+    clearTimeout(schemalagg);
+    var bild = document.createElement("IMG");
+    bild.setAttribute("src", "smiley.png");
+    bild.classList.add("manga");
+    bild.setAttribute("style", "top: " + ((Math.random() * 100) - 60) + "vh;");
+    setTimeout(taBort, 8000, bild)
+    document.getElementById("overlay").appendChild(bild);
+    schemalagg = setTimeout(schemalaggNy, Math.random() * mellan);
+}
+function taBort(bild) {
+    bild.remove();
+}
+function minska() {
+    mellan -= 100;
+    if(mellan <= 100) {
+        mellan = 100;
+    }
+    if(klickat) {
+        mellan += 200;
+        if(mellan >= 10000) {
+            mellan = 10000;
+            klickat = false;
+        }
+    }
+    console.log(mellan);
+}
+function klicka() {
+    klickat = true;
+}
+</script>
+
+</body>
+</html>
